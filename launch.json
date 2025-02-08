@@ -1,0 +1,46 @@
+[
+  {
+    "HUL Code": "HUL-217085D-P1143",
+    "HUL Outlet Name": "A  C Mohamed-D-D",
+    "ME Name": "S K Islam",
+    "DETS Beat": "D-BOW STREET(2)_COMM",
+    "BasePack Code": 13336,
+    "BasePack Desc": "VIM LIQUID 200ML POUCH",
+    "Target (VMQ)": 3,
+    "Achv Qty": 0,
+    "Status": "Pending"
+  },
+  {
+    "HUL Code": "HUL-217085D-PAR3",
+    "HUL Outlet Name": "A B Agarwal-D-D",
+    "ME Name": "Sourav Das",
+    "DETS Beat": "D-MECHUA 1",
+    "BasePack Code": 13336,
+    "BasePack Desc": "VIM LIQUID 200ML POUCH",
+    "Target (VMQ)": 6,
+    "Achv Qty": 0,
+    "Status": "Pending"
+  },
+  {
+    "HUL Code": "HUL-217085D-PAR4",
+    "HUL Outlet Name": "A Basak-D-D",
+    "ME Name": "Sunil Mullick",
+    "DETS Beat": "D-BAGBAZAR",
+    "BasePack Code": 13336,
+    "BasePack Desc": "VIM LIQUID 200ML POUCH",
+    "Target (VMQ)": 6,
+    "Achv Qty": 12,
+    "Status": "Pending"
+  },
+  {
+    "HUL Code": "HUL-217701F-P4296",
+    "HUL Outlet Name": "A GENERAL STORE-F",
+    "ME Name": "Subir Mondal",
+    "DETS Beat": "D-COLOOTOLA PHEARS LANE",
+    "BasePack Code": 13336,
+    "BasePack Desc": "VIM LIQUID 200ML POUCH",
+    "Target (VMQ)": 6,
+    "Achv Qty": 12,
+    "Status": "Pending"
+  }
+]
