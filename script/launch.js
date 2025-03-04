@@ -16,13 +16,20 @@ function populateTable(data) {
     const tableBody = document.getElementById("table-body");
     tableBody.innerHTML = "";
 
-    data.forEach((item) => {
+    data.forEach((item, index) => {
         const row = document.createElement("tr");
-        for (const key of ["HUL Code", "HUL Outlet Name", "ME Name", "DETS Beat", "BasePack Code", "BasePack Desc", "Target (VMQ)", "Achv Qty", "Status"]) {
+        
+        // Add row number
+        const rowNumberCell = document.createElement("td");
+        rowNumberCell.textContent = index + 1;
+        row.appendChild(rowNumberCell);
+
+        ["HUL Code", "HUL Outlet Name", "ME Name", "DETS Beat", "BasePack Code", "BasePack Desc", "Target (VMQ)", "Achv Qty", "Status"].forEach(key => {
             const cell = document.createElement("td");
-            cell.textContent = item[key];
+            cell.textContent = item[key] || "";
             row.appendChild(cell);
-        }
+        });
+        
         tableBody.appendChild(row);
     });
 }
@@ -30,26 +37,21 @@ function populateTable(data) {
 function applyFilters() {
     let filteredData = [...jsonData];
 
-    const filterMeName = document.getElementById("filter-me-name").value;
-    const filterDetsBeat = document.getElementById("filter-dets-beat").value;
-    const filterBasePackDesc = document.getElementById("filter-basepack-desc").value;
+    const filters = {
+        "ME Name": document.getElementById("filter-me-name").value,
+        "DETS Beat": document.getElementById("filter-dets-beat").value,
+        "BasePack Desc": document.getElementById("filter-basepack-desc").value
+    };
+
     const searchQuery = document.getElementById("search-bar").value.toLowerCase();
 
-    if (filterMeName) {
-        filteredData = filteredData.filter(row => row["ME Name"] === filterMeName);
-    }
-    if (filterDetsBeat) {
-        filteredData = filteredData.filter(row => row["DETS Beat"] === filterDetsBeat);
-    }
-    if (filterBasePackDesc) {
-        filteredData = filteredData.filter(row => row["BasePack Desc"] === filterBasePackDesc);
-    }
-    if (searchQuery) {
-        filteredData = filteredData.filter(row => 
-            row["HUL Code"].toLowerCase().includes(searchQuery) ||
-            row["HUL Outlet Name"].toLowerCase().includes(searchQuery)
-        );
-    }
+    filteredData = filteredData.filter(row => 
+        (!filters["ME Name"] || row["ME Name"] === filters["ME Name"]) &&
+        (!filters["DETS Beat"] || row["DETS Beat"] === filters["DETS Beat"]) &&
+        (!filters["BasePack Desc"] || row["BasePack Desc"] === filters["BasePack Desc"]) &&
+        (!searchQuery || row["HUL Code"].toLowerCase().includes(searchQuery) || row["HUL Outlet Name"].toLowerCase().includes(searchQuery))
+    );
+    
     if (filterButtonActive) {
         filteredData = filteredData.filter(row => row["Status"] === "Pending");
     }
@@ -59,17 +61,13 @@ function applyFilters() {
 }
 
 function updateDropdowns(filteredData) {
-    const meNames = new Set(), detsBeats = new Set(), basePackDescs = new Set();
+    const headers = ["ME Name", "DETS Beat", "BasePack Desc"];
+    const options = headers.reduce((acc, key) => {
+        acc[key] = new Set(filteredData.map(row => row[key]).filter(Boolean));
+        return acc;
+    }, {});
     
-    filteredData.forEach(row => {
-        if (row["ME Name"]) meNames.add(row["ME Name"]);
-        if (row["DETS Beat"]) detsBeats.add(row["DETS Beat"]);
-        if (row["BasePack Desc"]) basePackDescs.add(row["BasePack Desc"]);
-    });
-
-    populateSelectDropdown("filter-me-name", meNames, "ME Name");
-    populateSelectDropdown("filter-dets-beat", detsBeats, "DETS Beat");
-    populateSelectDropdown("filter-basepack-desc", basePackDescs, "BasePack Desc");
+    headers.forEach(header => populateSelectDropdown(`filter-${header.toLowerCase().replace(/ /g, '-')}`, options[header], header));
 }
 
 function populateSelectDropdown(id, optionsSet, columnName) {
@@ -96,9 +94,7 @@ document.getElementById("reset-button").addEventListener("click", () => {
     filterButtonActive = false;
     document.getElementById("filter-button-1").style.backgroundColor = "blue";
     document.getElementById("search-bar").value = "";
-    document.getElementById("filter-me-name").selectedIndex = 0;
-    document.getElementById("filter-dets-beat").selectedIndex = 0;
-    document.getElementById("filter-basepack-desc").selectedIndex = 0;
+    ["filter-me-name", "filter-dets-beat", "filter-basepack-desc"].forEach(id => document.getElementById(id).selectedIndex = 0);
     applyFilters();
 });
 
