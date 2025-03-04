@@ -20,8 +20,8 @@ function populateTable(data) {
     let totals = { "LYRR": 0, "JQRR": 0, "LYTM": 0, "MTD": 0 };
 
     // Get selected values from dropdowns
-    const selectedMeName = document.getElementById("filter-me-name").value || "ALL ME Names";
-    const selectedDetsBeat = document.getElementById("filter-dets-beat").value || "ALL DETS Beats";
+    const selectedMeName = document.getElementById("filter-me-name").value || "ALL ME";
+    const selectedDetsBeat = document.getElementById("filter-dets-beat").value || "ALL Beats";
 
     // Calculate totals
     data.forEach(item => {
