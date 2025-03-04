@@ -42,17 +42,19 @@ function populateTable(data) {
 // Function to apply all filters and update the table and dropdowns
 function applyFilters() {
     let filteredData = jsonData.filter((row) => {
-        const filterDetsMeName = document.getElementById("filter-deets-me-name").value;
-        const filterDetsBeat = document.getElementById("filter-deets-beat").value;
-        const filterFnrMeName = document.getElementById("filter-fnr-me-name").value;
-        const filterFnrBeat = document.getElementById("filter-fnr-beat").value;
+        const filterValues = {
+            "DETS ME Name": document.getElementById("filter-deets-me-name").value,
+            "DETS Beat": document.getElementById("filter-deets-beat").value,
+            "FnR ME Name": document.getElementById("filter-fnr-me-name").value,
+            "FnR Beat": document.getElementById("filter-fnr-beat").value
+        };
         const searchQuery = document.getElementById("search-bar").value.toLowerCase();
 
         return (
-            (filterDetsMeName === "" || row["DETS ME Name"] === filterDetsMeName) &&
-            (filterDetsBeat === "" || row["DETS Beat"] === filterDetsBeat) &&
-            (filterFnrMeName === "" || row["FnR ME Name"] === filterFnrMeName) &&
-            (filterFnrBeat === "" || row["FnR Beat"] === filterFnrBeat) &&
+            (filterValues["DETS ME Name"] === "" || row["DETS ME Name"] === filterValues["DETS ME Name"]) &&
+            (filterValues["DETS Beat"] === "" || row["DETS Beat"] === filterValues["DETS Beat"]) &&
+            (filterValues["FnR ME Name"] === "" || row["FnR ME Name"] === filterValues["FnR ME Name"]) &&
+            (filterValues["FnR Beat"] === "" || row["FnR Beat"] === filterValues["FnR Beat"]) &&
             (searchQuery === "" ||
                 row["HUL Code"].toLowerCase().includes(searchQuery) ||
                 row["HUL Outlet Name"].toLowerCase().includes(searchQuery)) &&
@@ -68,27 +70,29 @@ function applyFilters() {
 // Function to update dropdown options dynamically
 function updateDropdowns(filteredData) {
     const dropdowns = {
-        "filter-deets-me-name": new Set(),
-        "filter-deets-beat": new Set(),
-        "filter-fnr-me-name": new Set(),
-        "filter-fnr-beat": new Set()
+        "filter-deets-me-name": { header: "DETS ME Name", values: new Set() },
+        "filter-deets-beat": { header: "DETS Beat", values: new Set() },
+        "filter-fnr-me-name": { header: "FnR ME Name", values: new Set() },
+        "filter-fnr-beat": { header: "FnR Beat", values: new Set() }
     };
 
     filteredData.forEach((row) => {
-        if (row["DETS ME Name"]) dropdowns["filter-deets-me-name"].add(row["DETS ME Name"]);
-        if (row["DETS Beat"]) dropdowns["filter-deets-beat"].add(row["DETS Beat"]);
-        if (row["FnR ME Name"]) dropdowns["filter-fnr-me-name"].add(row["FnR ME Name"]);
-        if (row["FnR Beat"]) dropdowns["filter-fnr-beat"].add(row["FnR Beat"]);
+        if (row["DETS ME Name"]) dropdowns["filter-deets-me-name"].values.add(row["DETS ME Name"]);
+        if (row["DETS Beat"]) dropdowns["filter-deets-beat"].values.add(row["DETS Beat"]);
+        if (row["FnR ME Name"]) dropdowns["filter-fnr-me-name"].values.add(row["FnR ME Name"]);
+        if (row["FnR Beat"]) dropdowns["filter-fnr-beat"].values.add(row["FnR Beat"]);
     });
 
-    Object.keys(dropdowns).forEach((id) => populateSelectDropdown(id, dropdowns[id]));
+    Object.keys(dropdowns).forEach((id) => {
+        populateSelectDropdown(id, dropdowns[id].values, dropdowns[id].header);
+    });
 }
 
-// Function to populate a single dropdown
-function populateSelectDropdown(id, optionsSet) {
+// Function to populate a single dropdown with a header as the default placeholder
+function populateSelectDropdown(id, optionsSet, headerName) {
     const dropdown = document.getElementById(id);
     const selectedValue = dropdown.value;
-    dropdown.innerHTML = `<option value="">${dropdown.getAttribute("data-placeholder")}</option>`;
+    dropdown.innerHTML = `<option value="">${headerName}</option>`; // Use column name as default option
 
     optionsSet.forEach((option) => {
         dropdown.innerHTML += `<option value="${option}" ${option === selectedValue ? "selected" : ""}>${option}</option>`;
