@@ -19,8 +19,9 @@ function populateTable(data) {
     const totalColumns = ["LYRR", "JQRR", "LYTM", "MTD"];
     let totals = { "LYRR": 0, "JQRR": 0, "LYTM": 0, "MTD": 0 };
 
-    // Get selected DETS Beat from dropdown
-    const selectedDetsBeat = document.getElementById("filter-dets-beat").value || "All Beats";
+    // Get selected values from dropdowns
+    const selectedMeName = document.getElementById("filter-me-name").value || "ALL ME Names";
+    const selectedDetsBeat = document.getElementById("filter-dets-beat").value || "ALL DETS Beats";
 
     // Calculate totals
     data.forEach(item => {
@@ -44,12 +45,12 @@ function populateTable(data) {
         totalRow.appendChild(emptyCell);
     });
 
-    // Set "ME Name" column as "TOTAL"
+    // Set "ME Name" column as selected dropdown value
     let meNameCell = document.createElement("td");
-    meNameCell.textContent = "TOTAL";
+    meNameCell.textContent = selectedMeName;
     totalRow.appendChild(meNameCell);
 
-    // Set "DETS Beat" column to selected dropdown value
+    // Set "DETS Beat" column as selected dropdown value
     let beatCell = document.createElement("td");
     beatCell.textContent = selectedDetsBeat;
     totalRow.appendChild(beatCell);
@@ -116,8 +117,9 @@ function populateSelectDropdown(id, optionsSet, columnName) {
     const selectedValue = dropdown.value;
     dropdown.innerHTML = "";
 
+    // Dropdown header
     const defaultOption = document.createElement("option");
-    defaultOption.textContent = "All " + columnName;
+    defaultOption.textContent = columnName;
     defaultOption.value = "";
     dropdown.appendChild(defaultOption);
 
