@@ -18,6 +18,7 @@ function populateTable(data) {
     // Columns to total
     const totalColumns = ["LYRR", "JQRR", "LYTM", "MTD"];
     let totals = { "LYRR": 0, "JQRR": 0, "LYTM": 0, "MTD": 0 };
+    let firstBeatName = data.length > 0 ? data[0]["DETS Beat"] : "-"; // Get first DETS Beat
 
     // Calculate totals
     data.forEach(item => {
@@ -35,15 +36,20 @@ function populateTable(data) {
     totalIndexCell.textContent = "Total";
     totalRow.appendChild(totalIndexCell);
 
-    ["HUL Code", "HUL Outlet Name", "ME Name", "DETS Beat"].forEach(() => {
+    ["HUL Code", "HUL Outlet Name", "ME Name"].forEach(() => {
         let emptyCell = document.createElement("td");
         emptyCell.textContent = "-";
         totalRow.appendChild(emptyCell);
     });
 
+    // Set first DETS Beat name
+    let beatCell = document.createElement("td");
+    beatCell.textContent = firstBeatName;
+    totalRow.appendChild(beatCell);
+
     totalColumns.forEach(key => {
         let totalCell = document.createElement("td");
-        totalCell.textContent = totals[key].toFixed(2);
+        totalCell.textContent = totals[key]; // No decimal formatting
         totalRow.appendChild(totalCell);
     });
 
