@@ -15,6 +15,41 @@ function populateTable(data) {
     const tableBody = document.getElementById("table-body");
     tableBody.innerHTML = "";
 
+    // Columns to total
+    const totalColumns = ["LYRR", "JQRR", "LYTM", "MTD"];
+    let totals = { "LYRR": 0, "JQRR": 0, "LYTM": 0, "MTD": 0 };
+
+    // Calculate totals
+    data.forEach(item => {
+        totalColumns.forEach(key => {
+            totals[key] += parseFloat(item[key]) || 0;
+        });
+    });
+
+    // Create Total Row
+    const totalRow = document.createElement("tr");
+    totalRow.style.fontWeight = "bold";
+    totalRow.style.backgroundColor = "#f2f2f2";
+
+    let totalIndexCell = document.createElement("td");
+    totalIndexCell.textContent = "Total";
+    totalRow.appendChild(totalIndexCell);
+
+    ["HUL Code", "HUL Outlet Name", "ME Name", "DETS Beat"].forEach(() => {
+        let emptyCell = document.createElement("td");
+        emptyCell.textContent = "-";
+        totalRow.appendChild(emptyCell);
+    });
+
+    totalColumns.forEach(key => {
+        let totalCell = document.createElement("td");
+        totalCell.textContent = totals[key].toFixed(2);
+        totalRow.appendChild(totalCell);
+    });
+
+    tableBody.appendChild(totalRow);
+
+    // Populate Data Rows
     data.forEach((item, index) => {
         const row = document.createElement("tr");
         const cellIndex = document.createElement("td");
@@ -26,6 +61,7 @@ function populateTable(data) {
             cell.textContent = item[key] || "-";
             row.appendChild(cell);
         });
+
         tableBody.appendChild(row);
     });
 }
@@ -66,12 +102,12 @@ function populateSelectDropdown(id, optionsSet, columnName) {
     const dropdown = document.getElementById(id);
     const selectedValue = dropdown.value;
     dropdown.innerHTML = "";
-    
+
     const defaultOption = document.createElement("option");
     defaultOption.textContent = columnName;
     defaultOption.value = "";
     dropdown.appendChild(defaultOption);
-    
+
     optionsSet.forEach(option => {
         const optionElement = document.createElement("option");
         optionElement.textContent = option;
